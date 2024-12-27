@@ -30,7 +30,7 @@
 
             <div class="form-group">
                 <label for="contact">Contact:</label>
-                <input type="text" id="contact" name="contact" class="form-control" value="{{ old('contact', $lead->contact ?? '') }}" required>
+                <input type="text" id="contact" name="contact" class="form-control @error('contact') is-invalid @enderror" value="{{ old('contact', $lead->contact ?? '') }}" required>
                 @error('contact')
                     <div class="text-danger small">{{ $message }}</div>
                 @enderror
@@ -38,7 +38,7 @@
 
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $lead->email ?? '') }}" required>
+                <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $lead->email ?? '') }}" required>
                 @error('email')
                     <div class="text-danger small">{{ $message }}</div>
                 @enderror
@@ -46,7 +46,7 @@
 
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $lead->name ?? '') }}" required>
+                <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $lead->name ?? '') }}" required>
                 @error('name')
                     <div class="text-danger small">{{ $message }}</div>
                 @enderror
