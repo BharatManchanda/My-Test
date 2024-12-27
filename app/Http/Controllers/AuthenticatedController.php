@@ -10,15 +10,14 @@ use Illuminate\Support\Facades\Hash;
 class AuthenticatedController extends Controller
 {
     //
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
         if (Auth::attempt($validated)) {
-            return redirect()->intended('/dashboard');
+            return redirect()->route('leads.index');
         }
 
         return back()->withErrors([
@@ -32,7 +31,7 @@ class AuthenticatedController extends Controller
 
     public function showLoginForm() {
         if (Auth::check()) {
-            return redirect('/dashboard');
+            return redirect()->route('leads.index');
         }
         return view('auth.login');
     }

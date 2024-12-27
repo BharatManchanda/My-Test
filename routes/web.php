@@ -27,13 +27,14 @@ Route::prefix('/')->name('auth.')->group(function () {
     Route::post('/logout', [AuthenticatedController::class, 'logout'])->name('logout');
 });
 
-Route::prefix('/')->group(function () {
-    Route::get('/dashboard', [LeadController::class, 'dashboard'])->name('dashboard');
-
-    Route::prefix('/')->name('lead.')->group(function () {
-        Route::get('/create', [LeadController::class, 'showCreateOrUpdate'])->name('show.create.or.update.form');
-        Route::post('/create', [LeadController::class, 'create'])->name('show.create.form');
-        Route::post('/update', [LeadController::class, 'update'])->name('show.update.form');
-        Route::post('/delete', [LeadController::class, 'delete'])->name('delete');
+Route::prefix('/')->middleware('auth')->group(function () {
+    
+    Route::prefix('/lead')->name('leads.')->group(function () {
+        Route::get('/', [LeadController::class, 'index'])->name('index');
+        Route::get('/create', [LeadController::class, 'showCreateOrUpdate'])->name('show.create.form');
+        Route::get('/update/{id}', [LeadController::class, 'showCreateOrUpdate'])->name('show.update.form');
+        Route::post('/create', [LeadController::class, 'create'])->name('create');
+        Route::post('/update', [LeadController::class, 'update'])->name('update');
+        Route::post('/delete', [LeadController::class, 'destroy'])->name('destroy');
     });
 });

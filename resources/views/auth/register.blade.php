@@ -9,7 +9,7 @@
                         <h4>Register</h4>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ url('/register') }}">
+                        <form method="POST" action="{{ route('auth.register') }}">
                             @csrf
 
                             <!-- Name Field -->
