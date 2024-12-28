@@ -81,7 +81,7 @@
             </div>
         @endif
         <div class="d-flex justify-content-center my-4">
-            {{ $leads->appends(["type" => $type])->links('pagination::bootstrap-5') }}
+            {{ $leads->appends(["type" =>  request('type')])->links('pagination::bootstrap-5') }}
         </div>
     </div>
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
