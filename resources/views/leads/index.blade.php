@@ -18,7 +18,7 @@
                 </form>
             </div>
         </div>
-        <!-- Success message -->
+        
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -40,7 +40,6 @@
             </div>
         </div>
 
-        <!-- Leads Table -->
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
