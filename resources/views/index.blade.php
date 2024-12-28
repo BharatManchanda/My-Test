@@ -6,8 +6,13 @@
         <div class="container text-center">
             <h1 class="display-4">Welcome to Laravel Application</h1>
             <p class="lead">A simple and elegant platform to manage your tasks.</p>
-            <a href="{{ route('auth.show.login.form') }}" class="btn btn-light btn-lg me-3">Login</a>
-            <a href="{{ route('auth.show.register.form') }}" class="btn btn-outline-light btn-lg">Sign Up</a>
+            @guest
+                <a href="{{ route('auth.show.login.form') }}" class="btn btn-light btn-lg me-3">Login</a>
+                <a href="{{ route('auth.show.register.form') }}" class="btn btn-outline-light btn-lg">Sign Up</a>
+                @else
+                <p class="mt-3">Welcome back, {{ auth()->user()->name }}!</p>
+                <a href="{{ route('leads.index') }}" class="btn btn-outline-light btn-lg">Go to Leads</a>
+            @endguest
         </div>
     </div>
 

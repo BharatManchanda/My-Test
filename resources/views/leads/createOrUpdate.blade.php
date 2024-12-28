@@ -1,77 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $lead ? 'Edit Lead' : 'Create Lead' }}</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@extends('layout')
+
+@section('content')
     <div class="container mt-5">
-        <h1 class="text-center">{{ $lead ? 'Edit Lead' : 'Create New Lead' }}</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-6">
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <h4 class="text-center mb-4">{{ $lead ? 'Edit Lead' : 'Create New Lead' }}</h4>
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                            <form action="{{ $lead ? route('leads.update') : route('leads.create') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" value="{{  $lead->id ?? '' }}">
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+                                <div class="form-group mb-4">
+                                    <label for="title">Title:</label>
+                                    <input type="text" id="title" name="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $lead->title ?? '') }}">
+                                    @error('title')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="contact">Contact:</label>
+                                    <input type="text" id="contact" name="contact" class="form-control @error('contact') is-invalid @enderror" value="{{ old('contact', $lead->contact ?? '') }}">
+                                    @error('contact')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $lead->email ?? '') }}">
+                                    @error('email')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $lead->name ?? '') }}">
+                                    @error('name')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="type">Type:</label>
+                                    <select id="type" name="type" class="form-control">
+                                        <option value="web" {{ old('type', $lead->type ?? '') == 'web' ? 'selected' : '' }}>Web</option>
+                                        <option value="walkin" {{ old('type', $lead->type ?? '') == 'walkin' ? 'selected' : '' }}>Walkin</option>
+                                        <option value="store" {{ old('type', $lead->type ?? '') == 'store' ? 'selected' : '' }}>Store</option>
+                                    </select>
+                                    @error('type')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary w-100 py-2">{{ $lead ? 'Update Lead' : 'Create Lead' }}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ route('leads.index') }}" class="btn btn-link">Back to Leads List</a>
             </div>
-        @endif
-
-        <form action="{{ $lead ? route('leads.update') : route('leads.create') }}" method="POST">
-            @csrf
-            <input type="hidden" name="id" value="{{  $lead->id ?? '' }}">
-
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" class="form-control" value="{{ old('title', $lead->title ?? '') }}" required>
-                @error('title')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="contact">Contact:</label>
-                <input type="text" id="contact" name="contact" class="form-control @error('contact') is-invalid @enderror" value="{{ old('contact', $lead->contact ?? '') }}" required>
-                @error('contact')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $lead->email ?? '') }}" required>
-                @error('email')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $lead->name ?? '') }}" required>
-                @error('name')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="type">Type:</label>
-                <select id="type" name="type" class="form-control" required>
-                    <option value="WEB" {{ old('type', $lead->type ?? '') == 'WEB' ? 'selected' : '' }}>WEB</option>
-                    <option value="WALKIN" {{ old('type', $lead->type ?? '') == 'WALKIN' ? 'selected' : '' }}>WALKIN</option>
-                    <option value="STORE" {{ old('type', $lead->type ?? '') == 'STORE' ? 'selected' : '' }}>STORE</option>
-                </select>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">{{ $lead ? 'Update Lead' : 'Create Lead' }}</button>
-            </div>
-        </form>
-
-        <br>
-        <a href="{{ route('leads.index') }}" class="btn btn-link">Back to Leads List</a>
+        </div>
+    <br>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+@endsection

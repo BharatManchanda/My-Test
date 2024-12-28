@@ -17,15 +17,14 @@ class LeadFactory extends Factory
      */
     protected $model = Lead::class;
     
-    public function definition()
-    {
+    public function definition() {
 
         return [
             'title' => $this->faker->jobTitle,
-            'contact' => $this->faker->phoneNumber,
+            'contact' => $this->faker->numerify('##########'),
             'email' => $this->faker->unique()->safeEmail,
             'name' => $this->faker->name,
-            'type' => $this->faker->randomElement(['WEB', 'WALKIN', 'STORE']),
+            'type' => $this->faker->randomElement(['web', 'walkin', 'store']),
         ];
     }
 }
