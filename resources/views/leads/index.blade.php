@@ -80,6 +80,9 @@
                 No leads found.
             </div>
         @endif
+        <div class="d-flex justify-content-center my-4">
+            {{ $leads->links('pagination::bootstrap-5') }}
+        </div>
     </div>
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog">

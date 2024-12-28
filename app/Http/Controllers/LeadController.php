@@ -12,12 +12,14 @@ class LeadController extends Controller
     
     public function index(Request $request) {
         $type = $request->query('type', 'all');
-        $cacheKey = strtolower("leads_type_{$type}");
+        $page = $request->query('page', 1);
+        $cacheKey = strtolower("leads_type_{$type}_page_{$page}");
+
         $leads = Cache::remember($cacheKey, 60 * 5, function () use ($type) {
             if ($type === 'all') {
-                return Lead::latest()->get();
+                return Lead::latest()->paginate(20);
             } else {
-                return Lead::latest()->where('type', $type)->get();
+                return Lead::latest()->where('type', $type)->paginate(20);
             }
         });
         return view('leads.index', compact('leads'));
@@ -47,7 +49,7 @@ class LeadController extends Controller
             ]);
 
             $lead = Lead::create($request->all());
-            $this->clearChache();
+            $this->clearCache();
             return redirect()->route('leads.index')->with('success', 'Lead created successfully!');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
@@ -66,21 +68,29 @@ class LeadController extends Controller
         ]);
 
         $lead->update($request->all());
-        $this->clearChache();
+        $this->clearCache();
         return redirect()->route('leads.index')->with('success', 'Lead updated successfully!');
     }
 
     public function destroy(Request $request) {
         $lead = Lead::findOrFail($request->id);
-        $this->clearChache();
+        $this->clearCache();
         $lead->delete();
         return redirect()->route('leads.index')->with('success', 'Lead deleted successfully!');
     }
 
-    private function clearChache() {
-        Cache::forget("leads_type_all");
-        Cache::forget("leads_type_web");
-        Cache::forget("leads_type_walkin");
-        Cache::forget("leads_type_store");
+    private function clearCache() {
+        $types = ['all', 'web', 'walkin', 'store'];
+        foreach ($types as $type) {
+            $leadsQuery = Lead::latest();
+            if ($type !== 'all') {
+                $leadsQuery->where('type', $type);
+            }
+            $totalPages = ceil($leadsQuery->count() / 20);
+            for ($page = 1; $page <= $totalPages; $page++) {
+                Cache::forget("leads_type_{$type}_page_{$page}");
+            }
+        }
     }
+    
 }
